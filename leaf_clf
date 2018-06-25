@@ -154,7 +154,7 @@ epochs = 100
 
 
 y_train_cat = keras.utils.to_categorical(y_train, num_classes)  #convertendo as classes em vetores binários (one hot encoding)
-y_vald_cat = keras.utils.to_categorical(y_valid, num_classes)  
+y_valid_cat = keras.utils.to_categorical(y_valid, num_classes)  
 
 
 print("to_categorical")
@@ -185,9 +185,9 @@ early_stopping=EarlyStopping(monitor='val_loss', #observar a função de perda n
 							verbose=1,)    
 
 															  #fazendo uso dos monitores criados		
-model.fit(X_train, y_train_cat, batch_size=batch_size, epochs=epochs, callbacks=[reduce_lr, early_stopping], verbose=1, validation_data=(X_valid, y_vald_cat))
+model.fit(X_train, y_train_cat, batch_size=batch_size, epochs=epochs, callbacks=[reduce_lr, early_stopping], verbose=1, validation_data=(X_valid, y_valid_cat))
 
 print("1-NN: ",neigh.score(X_valid, y_valid))
 print("SVM: ",svm.score(X_valid, y_valid))
 print('Tree: ',tree.score(X_valid, y_valid))
-print("MLP:", model.evaluate(X_valid, y_train_cat, verbose=0)[1])
+print("MLP:", model.evaluate(X_valid, y_valid_cat, verbose=0)[1])
