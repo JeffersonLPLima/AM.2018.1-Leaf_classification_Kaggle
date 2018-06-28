@@ -8,7 +8,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 
 from matplotlib import pyplot as plt
 
- 
+
 
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
@@ -63,7 +63,10 @@ X_test = test.values
 
   
 print("Done")
-
+##
+##scaler = StandardScaler()
+##X_train = scaler.fit(X_train).transform(X_train)
+##X_valid = scaler.fit(X_valid).transform(X_valid)
 
 ## Classifying
 
@@ -185,9 +188,29 @@ early_stopping=EarlyStopping(monitor='val_loss', #observar a função de perda n
 							verbose=1,)    
 
 															  #fazendo uso dos monitores criados		
-model.fit(X_train, y_train_cat, batch_size=batch_size, epochs=epochs, callbacks=[reduce_lr, early_stopping], verbose=1, validation_data=(X_valid, y_valid_cat))
+history= model.fit(X_train, y_train_cat, batch_size=batch_size, epochs=epochs, callbacks=[reduce_lr, early_stopping], verbose=1, validation_data=(X_valid, y_valid_cat))
 
-print("1-NN: ",neigh.score(X_valid, y_valid))
-print("SVM: ",svm.score(X_valid, y_valid))
-print('Tree: ',tree.score(X_valid, y_valid))
-print("MLP:", model.evaluate(X_valid, y_valid_cat, verbose=0)[1])
+print("1-NN: ",1-neigh.score(X_valid, y_valid))
+print("SVM: ",1-svm.score(X_valid, y_valid))
+print('Tree: ',1-tree.score(X_valid, y_valid))
+print("MLP:", 1-model.evaluate(X_valid, y_valid_cat, verbose=0)[1])
+
+
+
+
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'val'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'val'], loc='upper left')
+plt.show()
